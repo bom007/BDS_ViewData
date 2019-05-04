@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>resource/AccountIcon.png</file>
+        <file>resource/back.png</file>
+        <file>resource/CartIcon.png</file>
+        <file>resource/CategoryIcon.png</file>
+        <file>resource/HomeIcon.png</file>
+        <file>resource/SearchIcon.png</file>
+        <file>resource/spinner.png</file>
+        <file>ScreenHome.qml</file>
+        <file>resource/logo.png</file>
+        <file>ScreenChangePassword.qml</file>
+        <file>ScreenForgotPassword.qml</file>
+        <file>ScreenLogin.qml</file>
+        <file>CustomButton.qml</file>
+        <file>CustomTextBox.qml</file>
+        <file>CustomScrollView.qml</file>
+        <file>CustomListResizableHeader.qml</file>
+        <file>resource/List_Black.png</file>
+        <file>resource/Website_Black.png</file>
+        <file>ListViewBDSData.qml</file>
+        <file>CustomCombobox.qml</file>
+        <file>CustomCalendar.qml</file>
+        <file>CustomScrollBarHorizontal.qml</file>
+        <file>CustomScrollBarVertical.qml</file>
+        <file>resource/ScrollButton_Selected.png</file>
+        <file>resource/ScrollButton_Unselected.png</file>
+        <file>resource/SortDownIcon_Unselected.png</file>
+        <file>resource/SortUpIcon_UnSelected.png</file>
+        <file>CustomComboboxWithCheckbox.qml</file>
+        <file>resource/Check_Green.png</file>
+        <file>resource/Next_Blue.png</file>
+        <file>resource/NextNext_Blue.png</file>
+        <file>resource/Prev_Blue.png</file>
+        <file>resource/PrevPrev_Blue.png</file>
+        <file>DataTPHCM.qml</file>
+    </qresource>
+</RCC>
