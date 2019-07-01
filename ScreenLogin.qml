@@ -1,28 +1,49 @@
 import QtQuick 2.0
 
-Rectangle {
-    color: "white"
+Item {
+    property string backgroundSource: ""
+    property string logoSource: ""
+    property string companyName: ""
+    property int logoSize: 0
+    Image {
+        id: name
+        source: backgroundSource
+        anchors.centerIn: parent
+    }
     Rectangle {
         anchors.centerIn: parent
-        width: parent.width - 20 * dpiToPixelValue
-        height: clItems.implicitHeight
-        color: "transparent"
+        width: 250 * dpiToPixelValue > (parent.width - 20 * dpiToPixelValue) ? (parent.width - 20 * dpiToPixelValue) : 250 * dpiToPixelValue
+        height: clItems.implicitHeight + 20 * dpiToPixelValue
+        color: "#AFFFFFFF"
+        radius: 5 * dpiToPixelValue
         Column{
             id:clItems
-            width: parent.width
+            width: parent.width - 20 * dpiToPixelValue
+            x: 10 * dpiToPixelValue
+            y: 10 * dpiToPixelValue
             spacing: 10 * dpiToPixelValue
+            Image{
+                source: logoSource
+                width: logoSize > 0 ? logoSize : 150 * dpiToPixelValue
+                height: logoSize > 0 ? logoSize : 150 * dpiToPixelValue
+                fillMode: Image.PreserveAspectFit
+                x: parent.width / 2 - width / 2
+            }
+
             Text {
-                text: qsTr("Sign In")
+                text: companyName
                 font.pixelSize: extraFontSize
                 color:baseColor
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                visible: companyName !== ""
             }
-            CustomTextBox{
+            Bootstrap_TextboxWithIcon{
                 id:txtPhoneNumber
-                placeholderText: "Phone Number"
+                placeholderText: qsTr("Số điện thoại")
                 width: parent.width
+                height: baseButtonHeight
                 textBoxRadius:height / 2
                 onTextChanged:{
                     if(txtPhoneNumber.text.trim() === "" || txtPassword.text.trim() === ""){
@@ -32,10 +53,11 @@ Rectangle {
                     }
                 }
             }
-            CustomTextBox{
+            Bootstrap_TextboxWithIcon{
                 id:txtPassword
-                placeholderText: "Password"
+                placeholderText: qsTr("Mật khẩu")
                 width: parent.width
+                height: baseButtonHeight
                 textBoxRadius:height / 2
                 echoMode: TextInput.Password
                 onTextChanged:{
@@ -48,16 +70,16 @@ Rectangle {
             }
             CustomButton{
                 id:btnSignIn
-                buttonText: qsTr("SIGN IN")
+                buttonText: qsTr("Đăng nhập")
                 buttonColor: enabled ? baseColor : "gray"
                 enabled: false
                 width: parent.width
                 onClicked: {
                     forceActiveFocus()
                     if(txtPhoneNumber.text.trim() === ""){
-                        messageDialog.show("Please input phone number")
+                        messageDialog.show("Vui lòng nhập số điện thoại")
                     }else if(txtPassword.text.trim() === ""){
-                        messageDialog.show("Please input password")
+                        messageDialog.show("Vui lòng nhập mật khẩu")
                     }else{
                         enabled = false
                         waitingDialog.show("Please wait")
@@ -67,31 +89,31 @@ Rectangle {
                                 isLoggedIn = true
                             }
                         }else{
-                            messageDialog.show("Wrong phone number or password")
+                            messageDialog.show("Sai SĐT hoặc mật khẩu")
                         }
                         waitingDialog.close()
                         enabled = true
                     }
                 }
             }
-            Text {
-                text: qsTr("Or")
-                font.pixelSize: normalFontSize
-                color:baseColor
-                width: parent.width
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+//            Text {
+//                text: qsTr("Or")
+//                font.pixelSize: normalFontSize
+//                color:baseColor
+//                width: parent.width
+//                horizontalAlignment: Text.AlignHCenter
+//                verticalAlignment: Text.AlignVCenter
+//            }
 
-            CustomButton{
-                buttonText: qsTr("Forgot password")
-                width: parent.width
-                onClicked: {
-                    enabled = false
-                    mainStackView.push("qrc:/ScreenForgotPassword.qml")
-                    enabled = true
-                }
-            }
+//            CustomButton{
+//                buttonText: qsTr("Quên mật khẩu")
+//                width: parent.width
+//                onClicked: {
+//                    enabled = false
+//                    mainStackView.push("qrc:/ScreenForgotPassword.qml")
+//                    enabled = true
+//                }
+//            }
         }
     }
 }

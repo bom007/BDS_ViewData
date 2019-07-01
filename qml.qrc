@@ -35,5 +35,20 @@
         <file>resource/Prev_Blue.png</file>
         <file>resource/PrevPrev_Blue.png</file>
         <file>DataTPHCM.qml</file>
+        <file>Boostrap_DropDown.qml</file>
+        <file>resource/control_dropdown.png</file>
+        <file>resource/control_toggle.png</file>
+        <file>Materials_TextBox.qml</file>
+        <file>resource/header.png</file>
+        <file>Boostrap_DropDownNaked.qml</file>
+        <file>resource/Setting_Icon_White.png</file>
+        <file>ButtonWithIcon.qml</file>
+        <file>CustomTableCell.qml</file>
+        <file>PagingFooter.qml</file>
+        <file>TableCellWithIcon.qml</file>
+        <file>resource/Refresh_White.png</file>
+        <file>resource/login_background.jpeg</file>
+        <file>Bootstrap_TextboxWithIcon.qml</file>
+        <file>MsgDialog_iOS.qml</file>
     </qresource>
 </RCC>

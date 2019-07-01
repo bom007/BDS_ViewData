@@ -1,20 +1,22 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.2
 
 ApplicationWindow {
     id:mainWindow
     visible: true
-    width: 1024
-    height: 768
+    width: Screen.desktopAvailableWidth > 1600 ? 1600 : Screen.desktopAvailableWidth
+    height: Screen.desktopAvailableHeight > 900 ? 900 : Screen.desktopAvailableHeight
     property int baseButtonHeight: 40 * dpiToPixelValue
-    property int normalFontSize: 12 * dpiToPixelValue
+    property int normalFontSize: 14 * dpiToPixelValue
     property int bigFontSize: 20 * dpiToPixelValue
     property int extraFontSize: 24 * dpiToPixelValue
     property int smallFontSize: 12 * dpiToPixelValue
     property color baseColor: "#0078D7"
     property bool isLoggedIn: false
     property bool isAutoLogin: true
+
     StackView {
         id: mainStackView
         width: parent.width
@@ -38,19 +40,21 @@ ApplicationWindow {
         running: false
         repeat: false
         onTriggered: {
-            waitingDialog.show("Starting application")
-//            if(appManager.autoLogin() === false){
-//                if(appManager.startupApplication() === true){
-//                    mainStackView.visible = true
-//                    mainStackView.push("qrc:/ScreenLogin.qml")
-//                }
-//            }else{
-//                if(appManager.startupApplication() === true){
+            waitingDialog.show("Khởi động ứng dụng")
+            if(appManager.autoLogin() === false){
+                if(appManager.startupApplication() === true){
+                    mainStackView.visible = true
+                    mainStackView.push("qrc:/ScreenLogin.qml",
+                                       {backgroundSource: "qrc:/resource/login_background.jpeg",
+                                       logoSource: "qrc:/resource/logo.png"})
+                }
+            }else{
+                if(appManager.startupApplication() === true){
                     mainStackView.visible = true
                     mainStackView.push("qrc:/ScreenHome.qml")
                     isLoggedIn = true
-//                }
-//            }
+                }
+            }
             recSplash.visible = false
             waitingDialog.close()
         }
@@ -58,6 +62,8 @@ ApplicationWindow {
 
     Component.onCompleted: {
         tmSplashTimer.start()
+        console.log(width)
+        console.log(height)
     }
     Rectangle{
         id: bgMessageDialog
@@ -118,64 +124,11 @@ ApplicationWindow {
             direction: RotationAnimator.Clockwise
             loops: Animation.Infinite
         }
-        height: txtWaitingMessage.height + rectLoginMessageRow.height + 20 * dpiToPixelValue + imgWaitingIndicator.height
+        height: txtWaitingMessage.height + 20 * dpiToPixelValue + imgWaitingIndicator.height
     }
 
-    Rectangle{
+    MsgDialog_iOS{
         id: messageDialog
-        signal closed
-
-        function show(string){
-            txtLoginMessageContent.text=string
-            visible = true
-        }
-
-        function close(){
-            messageDialog.visible = false
-            closed()
-        }
-        anchors.centerIn: parent
-        radius: 10 * dpiToPixelValue
-        width: parent.width - 20 * dpiToPixelValue
-        color: "white"
-        visible: false
-        Text {
-            id: txtLoginMessageContent
-            padding: 6
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            x:parent.width / 2 - width / 2
-            anchors.top :parent.top
-            font.pixelSize: normalFontSize
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            width: parent.width
-        }
-        Rectangle{
-            id:rectLoginMessageRow
-            anchors.top:txtLoginMessageContent.bottom
-            anchors.topMargin: 5
-            color: "lightgray"
-            width: parent.width
-            height: 1
-        }
-        Button{
-            id:btnOK
-            text:"OK"
-            font.pixelSize: normalFontSize
-            width: parent.width / 2
-            height: baseButtonHeight
-            padding: 0
-            x: parent.width / 2 - width / 2
-            anchors.top:rectLoginMessageRow.bottom
-            background: Rectangle{
-                anchors.fill: parent
-                color: "transparent"
-            }
-            onClicked: {
-                messageDialog.close()
-            }
-        }
-        height: txtLoginMessageContent.height + btnOK.height + rectLoginMessageRow.height
     }
 
 }

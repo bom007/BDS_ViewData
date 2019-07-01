@@ -2,67 +2,50 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 
-Rectangle{
+Item{
     id: cbbMain
     property var model
+    property string currentTextValue: ""
+    property string placeHolderText: "Abc"
     // Option
-    property int cbbPopupItemHeight: baseButtonHeight
-    property int fontSizeCbb: normalFontSize
+    property int itemHeight: baseButtonHeight
+
+    property int fontSize: normalFontSize
     property int marginCbbItem: 5 * dpiToPixelValue
     property bool lvAreaMoving: false
     property alias lvMultiPoint: lvComboboxPopup
+    property color backgroundColor: "transparent"
     Rectangle {
         id: recDisplay
         width: parent.width
         height: parent.height
         radius: 5 * dpiToPixelValue
         y: parent.height / 2 - height / 2
-        border.color: baseColor
-        border.width: 1
+        color: backgroundColor
         Text{
             id: txtDisplay
-            text: "Hiển thị"
+            text: currentTextValue === "" ? placeHolderText : currentTextValue
             verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: Text.AlignLeft
             height: parent.height
-            width: parent.width - parent.height / 2
-            x:(parent.width - parent.height / 2) / 2 - width / 2
+            width: parent.width - imgIcon.width
             color: baseColor
-            font.pixelSize: fontSizeCbb
+            font.pixelSize: fontSize
             elide: Text.ElideRight
         }
-        MouseArea {
-            anchors.fill: txtDisplay
-            onClicked: {
-                if(menuCombobox.visible == true){
-                    menuCombobox.close()
-                }else{
-                    menuCombobox.open()
-                }
-            }
-
-            onDoubleClicked: {
-                txtDisplay.visible = false
-            }
+        Image {
+            id: imgIcon
+            width: 10 * dpiToPixelValue
+            height: width
+            source: "qrc:/resource/control_dropdown.png"
+            anchors.right: parent.right
+            anchors.rightMargin: 5 * dpiToPixelValue
+            y:parent.height / 2 - height / 2
         }
-    }
-
-    Image {
-        id: imgCbbLeftIcon
-        width: height
-        height: parent.height / 2
-        source: "qrc:/resource/SortDownIcon_Unselected.png"
-        anchors.right: parent.right
-        anchors.rightMargin: 5 * dpiToPixelValue
-        y:parent.height / 2 - height / 2
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                if(menuCombobox.visible == true){
-                    menuCombobox.close()
-                }else{
-                    menuCombobox.open()
-                }
+                menuCombobox.open()
             }
         }
     }
@@ -98,12 +81,12 @@ Rectangle{
             ListView {
                 id: lvComboboxPopup
                 width: cbbMain.width
-                height: lvComboboxPopup.count > 10 ? cbbPopupItemHeight * 10 : cbbPopupItemHeight * lvComboboxPopup.count
+                height: lvComboboxPopup.count > 10 ? itemHeight * 10 : itemHeight * lvComboboxPopup.count
                 y: recBackGround.radius
                 snapMode: ListView.SnapToItem
                 delegate: Rectangle {
                     width: cbbMain.width
-                    height: cbbPopupItemHeight
+                    height: itemHeight
                     color: "transparent"
                     Text{
                         id: txtComboboxNameItem
@@ -114,7 +97,7 @@ Rectangle{
                         height: parent.height
                         width: parent.width - 10 * dpiToPixelValue
                         color: baseColor
-                        font.pixelSize: fontSizeCbb
+                        font.pixelSize: fontSize
                         elide: Text.ElideRight
                     }
                     Rectangle{

@@ -183,7 +183,7 @@ bool AppManager::filterDanhSachTheoGia(int nGiaMin, int nGiaMax)
 
 void AppManager::goToPage(int nSelectedPage)
 {
-    m_current_page = nSelectedPage;
+    setCurrent_Page(nSelectedPage);
     getBDSData();
 }
 
@@ -258,7 +258,8 @@ void AppManager::getBDSData()
                 newData->setId(JSObjBDS.value("id").toString());
                 newData->setHinhanh(JSObjBDS.value("hinhanh").toString());
                 newData->setTieude(JSObjBDS.value("tieude").toString());
-                newData->setNoidung(JSObjBDS.value("noidung").toString());
+                QString newNoidung = QByteArray::fromHex(JSObjBDS.value("noidung").toString().toUtf8());
+                newData->setNoidung(newNoidung);
                 newData->setPhuongxa(JSObjBDS.value("phuongxa").toString());
                 newData->setQuanhuyen(JSObjBDS.value("quanhuyen").toString());
                 newData->setTinhthanh(JSObjBDS.value("tinhthanh").toString());
@@ -329,9 +330,12 @@ int AppManager::getPagecount()
 
 void AppManager::setCurrent_Page(int newValue)
 {
-    m_current_page= newValue;
-    emit current_pageChanged();
+    if(m_current_page != newValue){
+        m_current_page = newValue;
+        emit current_pageChanged();
+    }
 }
+
 
 void AppManager::updatePageViewed(int nSelectedPage)
 {

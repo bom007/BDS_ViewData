@@ -30,10 +30,27 @@ Flickable{
         spacing: 0
         height: baseButtonHeight
         CustomListResizableHeader{
-            id: txtChucnang
-            width: recHomeScreen.widthChucNang
+            id: txtLoaibaivietheader
+            text: "Loại bài viết"
+            width: recHomeScreen.widthLoaibaiviet
             clip: true
+            visible: recHomeScreen.displayLoaibaiviet
+            onSeperatorMoved: {
+                if(movement > 0){
+                    recHomeScreen.widthLoaibaiviet += movement
+                }else{
+                    if(recHomeScreen.widthLoaibaiviet > minimumWidth){
+                        var newWidth = recHomeScreen.widthLoaibaiviet + movement
+                        if(newWidth < minimumWidth){
+                            recHomeScreen.widthLoaibaiviet = minimumWidth
+                        }else{
+                            recHomeScreen.widthLoaibaiviet += movement
+                        }
+                    }
+                }
+            }
         }
+
         CustomListResizableHeader{
             id: txtTieudeheader
             text: "Tiêu đề"
@@ -92,27 +109,6 @@ Flickable{
                             recHomeScreen.widthGia = minimumWidth
                         }else{
                             recHomeScreen.widthGia += movement
-                        }
-                    }
-                }
-            }
-        }
-        CustomListResizableHeader{
-            id: txtLoaibaivietheader
-            text: "Loại bài viết"
-            width: recHomeScreen.widthLoaibaiviet
-            clip: true
-            visible: recHomeScreen.displayLoaibaiviet
-            onSeperatorMoved: {
-                if(movement > 0){
-                    recHomeScreen.widthLoaibaiviet += movement
-                }else{
-                    if(recHomeScreen.widthLoaibaiviet > minimumWidth){
-                        var newWidth = recHomeScreen.widthLoaibaiviet + movement
-                        if(newWidth < minimumWidth){
-                            recHomeScreen.widthLoaibaiviet = minimumWidth
-                        }else{
-                            recHomeScreen.widthLoaibaiviet += movement
                         }
                     }
                 }
@@ -328,7 +324,12 @@ Flickable{
                 }
             }
         }
-
+    }
+    Rectangle{
+        anchors.bottom: rowHeaderList.bottom
+        height: 2 * dpiToPixelValue
+        width: flickableBDSList.contentWidth
+        color: "lightgray"
     }
     ListView{
         id:lvBDSList
@@ -343,400 +344,182 @@ Flickable{
         delegate: Rectangle{
             id:recItem
             width: itemRow.implicitWidth//parent.width
-            height: isExpanding ? (baseButtonHeight > maxHeight ? baseButtonHeight : maxHeight) : baseButtonHeight
-            property bool isExpanding: lvBDSList.selectedItem === index ? true : false
-            property double maxHeight: txtTieude.height > txtNoiDung.height ? txtTieude.height : txtNoiDung.height
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    lvBDSList.selectedItem = index
-                }
-            }
+            height: activeFocus ? (baseButtonHeight > maxHeight ? baseButtonHeight : maxHeight) : baseButtonHeight
+            property double maxHeight: cellTieuDe.height > cellNoiDung.height ? cellTieuDe.height : cellNoiDung.height
+
             Row{
                 id:itemRow
                 spacing: 0
                 height: baseButtonHeight
-                Rectangle{
-                    id:recChucNang
-                    width: recHomeScreen.widthChucNang
-                    height: recItem.height
-                    color: "transparent"
-                    Image {
-                        source: "qrc:/resource/Website_Black.png"
-                        height: baseButtonHeight / 2
-                        width: height
-                        fillMode: Image.PreserveAspectFit
-                        x:parent.width / 2 + 5 * dpiToPixelValue
-                        y:parent.height / 2 - height / 2
-                        anchors.centerIn: parent
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                //                                Qt.openUrlExternally("http://www.stackoverflow.com/");
-                                console.log(modelData.pageurl)
-                                appManager.viewPage(index)
-                                Qt.openUrlExternally(modelData.pageurl)
-                            }
-                        }
-                    }
+//                Rectangle{
+//                    id:recChucNang
+//                    width: recHomeScreen.widthChucNang
+//                    height: recItem.height
+//                    color: "transparent"
+//                    Image {
+//                        source: "qrc:/resource/Website_Black.png"
+//                        height: baseButtonHeight / 2
+//                        width: height
+//                        fillMode: Image.PreserveAspectFit
+//                        x:parent.width / 2 + 5 * dpiToPixelValue
+//                        y:parent.height / 2 - height / 2
+//                        anchors.centerIn: parent
+//                        MouseArea{
+//                            anchors.fill: parent
+//                            onClicked: {
+//                                //                                Qt.openUrlExternally("http://www.stackoverflow.com/");
+//                                console.log(modelData.pageurl)
+//                                appManager.viewPage(index)
+//                                Qt.openUrlExternally(modelData.pageurl)
+//                            }
+//                        }
+//                    }
 
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
-                }
-
-                Rectangle{
-                    id:rectieude
-                    width: recHomeScreen.widthTieuDe
-                    height: txtTieude.height
-                    Text {
-                        id: txtTieude
-                        text: modelData.tieude
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthTieuDe
-                        height: isExpanding ? implicitHeight : baseButtonHeight
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                        clip: true
-                        wrapMode: isExpanding ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
-                        visible: recHomeScreen.displayTieuDe
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
-                }
-
-                Rectangle{
-                    width: recHomeScreen.widthDiachi
-                    height: parent.height
-                    id:recdiachi
-                    TextArea {
-                        id: txtDiachi
-                        text: modelData.diachi
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthDiachi
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        clip: true
-                        visible: recHomeScreen.displayDiachi
-                        selectByMouse: true
-                        readOnly: true
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
-                }
-
-                Rectangle{
-                    width: recHomeScreen.widthGia
-                    height: parent.height
-                    id:recgia
-                    Text {
-                        id: txtGia
-                        text: modelData.gia
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthGia
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        clip: true
-                        visible: recHomeScreen.displayGia
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
-                }
-
-                Rectangle{
+//                    Rectangle{
+//                        color: baseColor
+//                        height: recItem.height
+//                        width: 1
+//                        anchors.right: parent.right
+//                    }
+//                }
+                CustomTableCell{
                     width: recHomeScreen.widthLoaibaiviet
                     height: parent.height
-                    id:recloaibaidang
-                    Text {
-                        id: txtLoaibaiviet
-                        text: modelData.loaibaidang
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthLoaibaiviet
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayLoaibaiviet
-                        clip: true
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    text: modelData.loaibaidang
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayLoaibaiviet
                 }
-                Rectangle{
+
+                CustomTableCell{
+                    id:cellTieuDe
+                    width: recHomeScreen.widthTieuDe
+                    height: !expanded ? parent.height : textHeight
+                    text: modelData.tieude
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayTieuDe
+                    expanded: recItem.activeFocus
+                    horizontalAlignment: Text.AlignLeft
+                }
+                CustomTableCell{
+                    width: recHomeScreen.widthDiachi
+                    height: !expanded ? parent.height : textHeight
+                    text: modelData.diachi
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayDiachi
+                    expanded: recItem.activeFocus
+                    horizontalAlignment: Text.AlignLeft
+                }
+                CustomTableCell{
+                    width: recHomeScreen.widthGia
+                    height: parent.height
+                    text: modelData.gia
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayGia
+                    horizontalAlignment: Text.AlignLeft
+                }
+                CustomTableCell{
                     width: recHomeScreen.widthNguoiDang
                     height: parent.height
-                    id:recten
-                    Text {
-                        id: txtNguoiDang
-                        text: modelData.ten
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthNguoiDang
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        clip: true
-                        visible: recHomeScreen.displayNguoiDang
-                        elide: Text.ElideRight
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    text: modelData.ten
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayNguoiDang
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthSoDienThoai
                     height: parent.height
-                    id:recsodienthoai
-                    TextArea {
-                        id: txtSodienThoai
-                        text: modelData.sodienthoai
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthSoDienThoai
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displaySoDienThoai
-                        clip: true
-                        selectByMouse: true
-                        readOnly: true
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    text: modelData.sodienthoai
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displaySoDienThoai
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthNgayDang
                     height: parent.height
-                    id:recngaydang
-                    Text {
-                        id: txtNgayDang
-                        text: modelData.ngaydang
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthNgayDang
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayNgayDang
-                        clip: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    text: modelData.ngaydang
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayNgayDang
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Rectangle{
+
+                CustomTableCell{
+                    id:cellNoiDung
                     width: recHomeScreen.widthNoiDung
-                    height: txtNoiDung.height
-                    id:recnoidung
-                    TextArea {
-                        id: txtNoiDung
-                        text: modelData.noidung
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthNoiDung
-                        horizontalAlignment: Text.AlignLeft
-                        height: isExpanding ? implicitHeight : baseButtonHeight
-                        verticalAlignment: Text.AlignTop
-                        visible: recHomeScreen.displayNoiDung
-                        clip: true
-                        wrapMode: isExpanding ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
-                        selectByMouse: true
-                        readOnly: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    height: !expanded ? parent.height : textHeight
+                    text: modelData.noidung
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayNoiDung
+                    horizontalAlignment: Text.AlignLeft
+                    expanded: recItem.activeFocus
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthQuanHuyen
-                    height: txtNoiDung.height
-                    id:recquanhuyen
-                    Text {
-                        id: txtQuanHuyen
-                        text: modelData.quanhuyen
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthQuanHuyen
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayQuanHuyen
-                        clip: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    height: parent.height
+                    text: modelData.quanhuyen
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayQuanHuyen
+                    horizontalAlignment: Text.AlignLeft
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthPhuongXa
-                    height: txtNoiDung.height
-                    id:recphuongxa
-                    Text {
-                        id: txtPhuongXa
-                        text: modelData.phuongxa
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthPhuongXa
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayPhuongXa
-                        clip: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    height: parent.height
+                    text: modelData.phuongxa
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayPhuongXa
+                    horizontalAlignment: Text.AlignLeft
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthDienTichDat
-                    height: txtNoiDung.height
-                    id:recdientichdat
-                    Text {
-                        id: txtDienTichDat
-                        text: modelData.dientichdat
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthDienTichDat
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayDienTichDat
-                        clip: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    height: parent.height
+                    text: modelData.dientichdat
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayDienTichDat
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthMatTien
-                    height: txtNoiDung.height
-                    id:recmattien
-                    Text {
-                        id: txtMatTien
-                        text: modelData.mattien
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthMatTien
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayMatTien
-                        clip: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    height: parent.height
+                    text: modelData.mattien
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayMatTien
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Rectangle{
+
+                CustomTableCell{
                     width: recHomeScreen.widthDuongVao
-                    height: txtNoiDung.height
-                    id:recduongvao
-                    Text {
-                        id: txtDuongVao
-                        text: modelData.duongvao
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthDuongVao
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayDuongVao
-                        clip: true
-
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                    height: parent.height
+                    text: modelData.duongvao
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayDuongVao
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                Rectangle{
-                    width: recHomeScreen.widthPhapLy
-                    height: txtNoiDung.height
-                    id:recphaply
-                    Text {
-                        id: txtPhapLy
-                        text: modelData.phaply
-                        color: modelData.userviewed ? "gray" : "black"
-                        font.pixelSize: normalFontSize
-                        width: recHomeScreen.widthPhapLy
-                        horizontalAlignment: Text.AlignHCenter
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                        visible: recHomeScreen.displayPhapLy
-                        clip: true
 
-                    }
-                    Rectangle{
-                        color: baseColor
-                        height: recItem.height
-                        width: 1
-                        anchors.right: parent.right
-                    }
+                CustomTableCell{
+                    width: recHomeScreen.widthPhapLy
+                    height: parent.height
+                    text: modelData.phaply
+                    viewed: modelData.userviewed
+                    visible: recHomeScreen.displayPhapLy
+                    horizontalAlignment: Text.AlignLeft
                 }
             }
             Rectangle{
-                anchors.bottom: parent.bottom
-                width: recItem.width
-                height: 1
-                color: baseColor
+                anchors.bottom: recItem.bottom
+                height: 2 * dpiToPixelValue
+                width: flickableBDSList.contentWidth
+                color: "lightgray"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    recItem.forceActiveFocus()
+                }
             }
         }
     }
