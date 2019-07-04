@@ -41,20 +41,20 @@ ApplicationWindow {
         repeat: false
         onTriggered: {
             waitingDialog.show("Khởi động ứng dụng")
-            if(appManager.autoLogin() === false){
-                if(appManager.startupApplication() === true){
-                    mainStackView.visible = true
-                    mainStackView.push("qrc:/ScreenLogin.qml",
-                                       {backgroundSource: "qrc:/resource/login_background.jpeg",
-                                       logoSource: "qrc:/resource/logo.png"})
-                }
-            }else{
-                if(appManager.startupApplication() === true){
+//            if(appManager.autoLogin() === false){
+//                if(appManager.startupApplication() === true){
+//                    mainStackView.visible = true
+//                    mainStackView.push("qrc:/ScreenLogin.qml",
+//                                       {backgroundSource: "qrc:/resource/login_background.jpeg",
+//                                       logoSource: "qrc:/resource/logo.png"})
+//                }
+//            }else{
+//                if(appManager.startupApplication() === true){
                     mainStackView.visible = true
                     mainStackView.push("qrc:/ScreenHome.qml")
-                    isLoggedIn = true
-                }
-            }
+//                    isLoggedIn = true
+//                }
+//            }
             recSplash.visible = false
             waitingDialog.close()
         }
