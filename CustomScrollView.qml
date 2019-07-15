@@ -6,7 +6,7 @@ Flickable{
     clip: true
     boundsBehavior: Flickable.StopAtBounds
     contentHeight: lvBDSList.contentHeight + baseButtonHeight * 2
-    contentWidth: rowHeaderList.implicitWidth + 20 * dpiToPixelValue
+    contentWidth: rowHeaderList.implicitWidth + 50 * dpiToPixelValue
     states: State {
         name: "ShowBars"
         when: flickableBDSList.movingVertically || flickableBDSList.movingHorizontally
@@ -24,6 +24,8 @@ Flickable{
     property bool displayMatTien: false
     property bool displayDuongVao: false
     property bool displayPhapLy: false
+    property string strOwner : "ChinhChu"
+    property string strBroker : "MoGioi"
 
     Row{
         id:rowHeaderList
@@ -346,49 +348,45 @@ Flickable{
             width: itemRow.implicitWidth//parent.width
             height: activeFocus ? (baseButtonHeight > maxHeight ? baseButtonHeight : maxHeight) : baseButtonHeight
             property double maxHeight: cellTieuDe.height > cellNoiDung.height ? cellTieuDe.height : cellNoiDung.height
+            property bool webIconClicked: false
 
             Row{
                 id:itemRow
                 spacing: 0
                 height: baseButtonHeight
-//                Rectangle{
-//                    id:recChucNang
-//                    width: recHomeScreen.widthChucNang
-//                    height: recItem.height
-//                    color: "transparent"
-//                    Image {
-//                        source: "qrc:/resource/Website_Black.png"
-//                        height: baseButtonHeight / 2
-//                        width: height
-//                        fillMode: Image.PreserveAspectFit
-//                        x:parent.width / 2 + 5 * dpiToPixelValue
-//                        y:parent.height / 2 - height / 2
-//                        anchors.centerIn: parent
-//                        MouseArea{
-//                            anchors.fill: parent
-//                            onClicked: {
-//                                //                                Qt.openUrlExternally("http://www.stackoverflow.com/");
-//                                console.log(modelData.pageurl)
-//                                appManager.viewPage(index)
-//                                Qt.openUrlExternally(modelData.pageurl)
-//                            }
-//                        }
-//                    }
 
-//                    Rectangle{
-//                        color: baseColor
-//                        height: recItem.height
-//                        width: 1
-//                        anchors.right: parent.right
-//                    }
-//                }
-                CustomTableCell{
+                Rectangle{
+                    id:recUserIcon
                     width: recHomeScreen.widthLoaibaiviet
-                    height: parent.height
-                    text: modelData.loaibaidang
-                    viewed: modelData.userviewed
-                    visible: recHomeScreen.displayLoaibaiviet
+                    height: recItem.height
+                    color: "transparent"
+                    Image {
+                        source: modelData.loaibaidang === strOwner ? "qrc:/resource/OwnerIcon.png" :
+                                                                    modelData.loaibaidang === strBroker ? "qrc:/resource/BrokerIcon.png" :
+                                                                                                            "qrc:/resource/InvestorIcon.png"
+                        height: baseButtonHeight / 2
+                        width: height
+                        fillMode: Image.PreserveAspectFit
+                        x:parent.width / 2 + 5 * dpiToPixelValue
+                        y:parent.height / 2 - height / 2
+                        anchors.centerIn: parent
+                    }
+
+                    Rectangle{
+                        color: baseColor
+                        height: recItem.height
+                        width: 1
+                        anchors.right: parent.right
+                    }
                 }
+
+//                CustomTableCell{
+//                    width: recHomeScreen.widthLoaibaiviet
+//                    height: parent.height
+//                    text: modelData.loaibaidang
+//                    viewed: modelData.userviewed
+//                    visible: recHomeScreen.displayLoaibaiviet
+//                }
 
                 CustomTableCell{
                     id:cellTieuDe
@@ -507,6 +505,40 @@ Flickable{
                     viewed: modelData.userviewed
                     visible: recHomeScreen.displayPhapLy
                     horizontalAlignment: Text.AlignLeft
+                }
+
+                Rectangle{
+                    id:recWebIcon
+                    width: recHomeScreen.widthChucNang
+                    height: recItem.height
+                    color: "transparent"
+                    Rectangle{
+                        color: baseColor
+                        height: recItem.height
+                        width: 1
+                        anchors.left: parent.left
+                    }
+
+                    Image {
+                        opacity: webIconClicked ? 0.5 : 1
+                        source: webIconClicked ? "qrc:/resource/Website_Black.png" : "qrc:/resource/Website_blu.png"
+                        height: baseButtonHeight / 2
+                        width: height
+                        fillMode: Image.PreserveAspectFit
+                        x:parent.width / 2 + 5 * dpiToPixelValue
+                        y:parent.height / 2 - height / 2
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            console.log(modelData.pageurl)
+                            appManager.viewPage(index)
+                            Qt.openUrlExternally(modelData.pageurl)
+                            webIconClicked = !webIconClicked
+                        }
+                    }
                 }
             }
             Rectangle{
