@@ -54,5 +54,6 @@
         <file>resource/InvestorIcon.png</file>
         <file>resource/OwnerIcon.png</file>
         <file>resource/Website_blu.png</file>
+        <file>CustomViewIcon.qml</file>
     </qresource>
 </RCC>
