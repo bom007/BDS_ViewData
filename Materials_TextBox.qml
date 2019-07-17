@@ -8,7 +8,7 @@ TextField {
     property string previousText: ""
     property int dataPoint: 0
 
-    background: Rectangle{
+    background: Rectangle {
         id:bgText
         color: "transparent"
         radius: textBoxRadius

@@ -50,5 +50,7 @@
         <file>resource/login_background.jpeg</file>
         <file>Bootstrap_TextboxWithIcon.qml</file>
         <file>MsgDialog_iOS.qml</file>
+        <file>EditContactView.qml</file>
+        <file>Meterials_Dropdown.qml</file>
     </qresource>
 </RCC>
