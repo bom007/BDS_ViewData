@@ -52,5 +52,6 @@
         <file>MsgDialog_iOS.qml</file>
         <file>EditContactView.qml</file>
         <file>Meterials_Dropdown.qml</file>
+        <file>resource/SettingContact.png</file>
     </qresource>
 </RCC>

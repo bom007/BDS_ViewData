@@ -3,6 +3,24 @@ import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.4
 
 Rectangle {
+    property var dataObject: {
+        "name": '1',
+        "id": '2',
+        "phoneNumber": '3',
+        "type": 'Môi giới'
+    }
+
+    function getFormData() {
+        var object = {
+            "name": txtName.text,
+            "id": txtId.text,
+            "phoneNumber": txtPhoneNumber.text,
+            "type": cbType.currentTextValue
+        }
+
+        return object;
+    }
+
     anchors.fill: parent
     anchors.margins: 20 * dpiToPixelValue
     RowLayout {
@@ -53,6 +71,7 @@ Rectangle {
                         width: parent.width
                         height: baseButtonHeight
                         font.pixelSize: normalFontSize
+                        text: dataObject.name
                     }
 
                     Materials_TextBox {
@@ -63,6 +82,7 @@ Rectangle {
                         width: parent.width
                         height: baseButtonHeight
                         font.pixelSize: normalFontSize
+                        text: dataObject.id
                     }
 
                     Materials_TextBox {
@@ -73,15 +93,18 @@ Rectangle {
                         width: parent.width
                         height: baseButtonHeight
                         font.pixelSize: normalFontSize
+                        text: dataObject.phoneNumber
                     }
 
                     Meterials_Dropdown {
+                        id: cbType
                         anchors.top: txtPhoneNumber.bottom
                         anchors.topMargin: 20 * dpiToPixelValue
                         placeHolderText: qsTr("Phân loại")
                         width: 160 * dpiToPixelValue
                         height: baseButtonHeight
-                        model: [1, 2, 3]
+                        model: ['Môi giới', 'Chính chủ', 'Nhà đầu tư']
+                        currentTextValue: dataObject.type
                     }
 
                     // footer
@@ -97,6 +120,9 @@ Rectangle {
                             buttonColor: "gray"
                             anchors.right: btnSave.left
                             anchors.rightMargin: 10 * dpiToPixelValue
+                            onClicked: {
+
+                            }
                         }
 
                         CustomButton {
@@ -113,6 +139,11 @@ Rectangle {
         Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Image {
+                id: name
+                anchors.centerIn: parent
+                source: "qrc:/resource/SettingContact.png"
+            }
         }
     }
 }

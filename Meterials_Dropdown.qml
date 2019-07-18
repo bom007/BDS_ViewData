@@ -30,7 +30,7 @@ Item{
             anchors.leftMargin: 10 * dpiToPixelValue
             height: parent.height
             width: parent.width - imgIcon.width
-            color: currentTextValue === "" ? bgText.border.color : baseColor
+            color: currentTextValue === "" ? "#b1b1b2" : baseColor
             font.pixelSize: fontSize
             elide: Text.ElideRight
         }
@@ -53,6 +53,7 @@ Item{
         }
 
         Image {
+            id: imgIcon
             width: 10 * dpiToPixelValue
             height: width
             source: "qrc:/resource/control_dropdown.png"
